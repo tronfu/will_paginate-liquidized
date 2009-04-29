@@ -8,8 +8,8 @@ h2. Caveats
 
 Ongoing issues with this project include;
 
-* ooops ! there's no plugin here yet - adding it soon :)
 * needs better tests, possibly switching to using RSpec
+* currently has only been tested within my own project - needs further testing
 
 h2. Setup / Using
 
@@ -27,7 +27,7 @@ h3. Installing
 
 h2. What does it do?
 
-TBA.
+Registers a new filter tag for Liquid to access will_paginate and also over writes the paginate LinkRenderer so it has reference to the template controller attribute and uses ActionView::Helpers::TagHelper for constructing the pagination links.
 
 h2. Credits
 

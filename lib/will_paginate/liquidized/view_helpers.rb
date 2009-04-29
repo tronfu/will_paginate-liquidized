@@ -1,0 +1,93 @@
+module WillPaginate::Liquidized   
+  module ViewHelpers
+    include WillPaginate::ViewHelpers
+    attr_reader :controller
+    
+    def will_paginate_liquid(collection, anchor = nil, prev_label = nil, next_label = nil)      
+      @controller = @context.registers[:controller]            
+                         
+      opts = {}
+      opts[:prev_label] = prev_label if prev_label
+      opts[:next_label] = next_label if next_label      
+      opts[:params]     = {:anchor => anchor} if anchor
+      
+      with_renderer 'WillPaginate::Liquidized::LinkRenderer' do 
+        will_paginate *[collection, opts].compact
+      end
+    end
+    
+    def with_renderer(renderer)
+      old_renderer, options[:renderer] = options[:renderer], renderer
+      result = yield
+      options[:renderer] = old_renderer
+      result
+    end
+    
+    def options
+      WillPaginate::ViewHelpers.pagination_options
+    end
+  end
+
+  class LinkRenderer < WillPaginate::LinkRenderer
+    
+    include ActionView::Helpers::UrlHelper 
+    include ActionView::Helpers::TagHelper 
+
+    def to_html
+      links = @options[:page_links] ? windowed_links : []
+      # previous/next buttons
+      links.unshift page_link_or_span(@collection.previous_page, 'disabled prev_page', @options[:previous_label])
+      links.push    page_link_or_span(@collection.next_page,     'disabled next_page', @options[:next_label])
+      
+      html = links.join(@options[:separator])
+      @options[:container] ? content_tag(:div, html, html_attributes) : html
+    end
+    
+    def page_link(page, text, attributes = {})
+      link_to text, url_for_page(page), attributes
+    end
+
+    def page_span(page, text, attributes = {})
+      content_tag :span, text, attributes
+    end
+              
+    def url_for_page(page)
+      page_one = page == 1
+      unless @url_string and !page_one
+        @url_params = {}
+        # page links should preserve GET parameters
+        stringified_merge @url_params, @template.controller.params if @template.controller.request.get? && @template.controller.params
+        stringified_merge @url_params, @options[:params] if @options[:params]
+        
+        if complex = param_name.index(/[^\w-]/)
+          page_param = (defined?(CGIMethods) ? CGIMethods : ActionController::AbstractRequest).
+            parse_query_parameters("#{param_name}=#{page}")
+          
+          stringified_merge @url_params, page_param
+        else
+          @url_params[param_name] = page_one ? 1 : 2
+        end
+
+        url = @template.controller.url_for(@url_params)
+        url = "#{url}##{@options[:params][:anchor]}" if @options[:params] && @options[:params][:anchor]
+        return url if page_one
+        
+        if complex
+          @url_string = url.sub(%r!((?:\?|&amp;)#{CGI.escape param_name}=)#{page}!, '\1@')
+          return url
+        else
+          @url_string = url
+          @url_params[param_name] = 3
+          @template.controller.url_for(@url_params).split(//).each_with_index do |char, i|
+            if char == '3' and url[i, 1] == '2'
+              @url_string[i] = '@'
+              break
+            end
+          end
+        end
+      end
+      # finally!
+      @url_string.sub '@', page.to_s
+    end
+  end  
+end        
