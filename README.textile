@@ -8,6 +8,7 @@ h2. Caveats
 
 Ongoing issues with this project include;
 
+* ooops ! there's no plugin here yet - adding it soon :)
 * needs better tests, possibly switching to using RSpec
 
 h2. Setup / Using
@@ -16,7 +17,7 @@ h3. Requirements
 
 What do you need?
 
-* "Rails":http://rubyonrails.org
+* "Rails":http://rubyonrails.org >= 2.2 
 * "Liquid":http://github.com/tobi/liquid/tree/master >= 2.0.0 (as a gem or plugin)
 * "Will-Paginate":http://wiki.github.com/mislav/will_paginate >= 2.3.8 (as a gem or plugin)
 
@@ -34,8 +35,8 @@ Who's who?
 
 * Authored by "Matthew Hutchinson":http://matthewhutchinson.net
 * Modified from the original plugin at "Artweb Design":http://www.artweb-design.de/projects/ruby-on-rails-plugin-will_paginate-liquidized
-* "Will-Paginate":http://wiki.github.com/mislav/will_paginate
-* "Liquid":http://github.com/tobi/liquid/tree/master
+* "Will-Paginate":http://wiki.github.com/mislav/will_paginate by "mislav":http://wiki.github.com/mislav/
+* "Liquid":http://github.com/tobi/liquid/tree/master by "tobi":http://github.com/tobi
 
 h2. Get out clause
 
