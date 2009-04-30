@@ -1,15 +1,13 @@
 module WillPaginate::Liquidized   
   module ViewHelpers
     include WillPaginate::ViewHelpers
-    attr_reader :controller
     
     def will_paginate_liquid(collection, anchor = nil, prev_label = nil, next_label = nil)      
-      @controller = @context.registers[:controller]            
-                         
       opts = {}
       opts[:prev_label] = prev_label if prev_label
       opts[:next_label] = next_label if next_label      
       opts[:params]     = {:anchor => anchor} if anchor
+      opts[:controller] = @context.registers[:controller]
       
       with_renderer 'WillPaginate::Liquidized::LinkRenderer' do 
         will_paginate *[collection, opts].compact
@@ -30,12 +28,15 @@ module WillPaginate::Liquidized
 
   class LinkRenderer < WillPaginate::LinkRenderer
     
-    include ActionView::Helpers::UrlHelper 
+    include ActionView::Helpers::UrlHelper
     include ActionView::Helpers::TagHelper 
 
     def to_html
+      return "<p><strong style=\"color:red;\">(Will Paginate Liquidized) Error:</strong> you must pass a controller in Liquid render call; <br/>
+              e.g. Liquid::Template.parse(\"{{ movies | will_paginate_liquid }}\").render({'movies' => @movies}, :registers => {:controller => @controller})</p>" unless @options[:controller]
+      
       links = @options[:page_links] ? windowed_links : []
-      # previous/next buttons
+      # previous/next buttons added in to the links collection
       links.unshift page_link_or_span(@collection.previous_page, 'disabled prev_page', @options[:previous_label])
       links.push    page_link_or_span(@collection.next_page,     'disabled next_page', @options[:next_label])
       
@@ -55,8 +56,9 @@ module WillPaginate::Liquidized
       page_one = page == 1
       unless @url_string and !page_one
         @url_params = {}
+        @controller = @options[:controller]
         # page links should preserve GET parameters
-        stringified_merge @url_params, @template.controller.params if @template.controller.request.get? && @template.controller.params
+        stringified_merge @url_params, @controller.params if @controller && @controller.request.get? && @controller.params
         stringified_merge @url_params, @options[:params] if @options[:params]
         
         if complex = param_name.index(/[^\w-]/)
@@ -68,7 +70,8 @@ module WillPaginate::Liquidized
           @url_params[param_name] = page_one ? 1 : 2
         end
 
-        url = @template.controller.url_for(@url_params)
+        url = @controller.url_for(@url_params)
+        url = url_for(@url_params)
         url = "#{url}##{@options[:params][:anchor]}" if @options[:params] && @options[:params][:anchor]
         return url if page_one
         
@@ -78,7 +81,7 @@ module WillPaginate::Liquidized
         else
           @url_string = url
           @url_params[param_name] = 3
-          @template.controller.url_for(@url_params).split(//).each_with_index do |char, i|
+          @controller.url_for(@url_params).split(//).each_with_index do |char, i|
             if char == '3' and url[i, 1] == '2'
               @url_string[i] = '@'
               break

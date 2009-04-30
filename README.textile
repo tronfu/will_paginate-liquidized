@@ -25,9 +25,46 @@ h3. Installing
 
 <pre>script/plugin install git://github.com/hiddenloop/will_paginate-liquidized.git</pre>
 
-h2. What does it do?
+h2. Using
 
-Registers a new filter tag for Liquid to access will_paginate and also over writes the paginate LinkRenderer so it has reference to the template controller attribute and uses ActionView::Helpers::TagHelper for constructing the pagination links.
+In your controller you might have something like this;
+
+<pre>
+  class MoviesController < ApplicationController
+    # GET /movies
+    # GET /movies.xml
+    def index
+      @movies = Movie.all.paginate(:page => params[:page], :per_page => 10)
+      respond_to do |format|
+        format.html # index.html.erb
+        format.xml  { render :xml => @movies }
+      end
+    end
+  end
+</pre>
+
+In your view put something like this in movies/index.html.erb;
+
+<pre>
+  <%= Liquid::Template.parse("{{ movies | will_paginate_liquid }}").render({'movies' => @movies}, :registers => {:controller => @controller}) %>  
+</pre>
+
+*NOTE:* you must remember to pass the current controller in rendering (:registers). If anyone can think of a way around this let me know.
+
+You won't get any pagination links until you exceed 10 (per_page setting defined in controller action). You can also pass the following other optional arguments to the will_paginate_liquid method.
+
+<pre>
+  {{ movies | will_paginate_liquid : 'anchor', 'prev_label', 'next_label' }}
+  
+  anchor: apply a #anchor to all generated urls in the pagination
+  prev_label: label for the previous page button
+  next_label: label for the next page button
+</pre>
+
+
+h2. What does the code do?
+
+Registers a new filter tag for Liquid to access will_paginate using a custom LinkRenderer so it can reference the @controller from the current liquid context[:registers]. Uses ActionView::Helpers::UrlHelper, ActionView::Helpers::TagHelper for constructing the pagination links.
 
 h2. Credits
 
