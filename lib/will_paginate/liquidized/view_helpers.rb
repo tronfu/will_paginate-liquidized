@@ -41,6 +41,7 @@ module WillPaginate::Liquidized
       links.push    page_link_or_span(@collection.next_page,     'disabled next_page', @options[:next_label])
       
       html = links.join(@options[:separator])
+      html_attributes.delete(:controller)
       @options[:container] ? content_tag(:div, html, html_attributes) : html
     end
     
