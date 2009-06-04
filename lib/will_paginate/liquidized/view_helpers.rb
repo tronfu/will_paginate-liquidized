@@ -72,7 +72,6 @@ module WillPaginate::Liquidized
         end
 
         url = @controller.url_for(@url_params)
-        url = url_for(@url_params)
         url = "#{url}##{@options[:params][:anchor]}" if @options[:params] && @options[:params][:anchor]
         return url if page_one
         
