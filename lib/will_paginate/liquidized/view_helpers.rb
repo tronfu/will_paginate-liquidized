@@ -4,10 +4,10 @@ module WillPaginate::Liquidized
     
     def will_paginate_liquid(collection, anchor = nil, prev_label = nil, next_label = nil)      
       opts = {}
-      opts[:prev_label] = prev_label if prev_label
-      opts[:next_label] = next_label if next_label      
-      opts[:params]     = {:anchor => anchor} if anchor
-      opts[:controller] = @context.registers[:controller]
+      opts[:previous_label] = prev_label if prev_label
+      opts[:next_label]     = next_label if next_label      
+      opts[:params]         = {:anchor => anchor} if anchor
+      opts[:controller]     = @context.registers[:controller]
       
       with_renderer 'WillPaginate::Liquidized::LinkRenderer' do 
         will_paginate *[collection, opts].compact
