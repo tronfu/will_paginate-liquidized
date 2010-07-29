@@ -23,7 +23,7 @@ What do you need?
 
 h3. Installing
 
-<pre>script/plugin install git://github.com/hiddenloop/will_paginate-liquidized.git</pre>
+<pre>script/plugin install git://github.com/matthutchinson/will_paginate-liquidized.git</pre>
 
 h2. Using
 
@@ -83,4 +83,4 @@ h2. Creative Commons License
 
 <a rel="license" href="http://creativecommons.org/licenses/by/2.0/uk/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/2.0/uk/80x15.png" /></a>
 
-<span xmlns:dc="http://purl.org/dc/elements/1.1/" property="dc:title">Will Paginate Liquidized</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://github.com/hiddenloop/will_paginate-liquidized" property="cc:attributionName" rel="cc:attributionURL">Matthew Hutchinson</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/2.0/uk/">Creative Commons Attribution 2.0 UK: England &amp; Wales License</a>.
+<span xmlns:dc="http://purl.org/dc/elements/1.1/" property="dc:title">Will Paginate Liquidized</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://github.com/matthutchinson/will_paginate-liquidized" property="cc:attributionName" rel="cc:attributionURL">Matthew Hutchinson</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/2.0/uk/">Creative Commons Attribution 2.0 UK: England &amp; Wales License</a>.
