@@ -2,14 +2,17 @@ h1. Will Paginate Liquidized
 
 h2. About
 
-A small plugin allowing you to use pagination from "will_paginate":http://wiki.github.com/mislav/will_paginate inside your "Liquid":http://github.com/tobi/liquid/tree/master templates. This is a new version of the "older plugin":http://www.artweb-design.de/projects/ruby-on-rails-plugin-will_paginate-liquidized at artweb-design.  I've basically re-written parts of it to work with the very latest versions of Liquid and Will-Paginate (see below for the version information). I will try to keep this plugin up to date with ongoing changes in the Liquid and Will-Paginate projects.  Check the latest commit logs and this doc for more information.
+This fork updates the will_paginate-liquidized plugin to work with WillPaginate 3.0.
 
 h2. Caveats
 
-Ongoing issues with this project include;
+Changes to the original:
 
-* needs better tests, possibly switching to using RSpec
-* currently has only been tested within my own project - needs further testing
+* the liquid method has been renamed to will_paginate from will_paginate_liquid.
+
+Ongoing issues with this project include:
+
+* currently has only been tested within my own project running Rails 3.0.3. needs further testing on 2.2.x and 2.3.x.
 
 h2. Setup / Using
 
@@ -17,13 +20,17 @@ h3. Requirements
 
 What do you need?
 
-* "Rails":http://rubyonrails.org >= 2.2 
+* "Rails":http://rubyonrails.org >= 2.2, 3.0
 * "Liquid":http://github.com/tobi/liquid/tree/master >= 2.0.0 (as a gem or plugin)
-* "Will-Paginate":http://wiki.github.com/mislav/will_paginate >= 2.3.8 (as a gem or plugin)
+* "Will-Paginate":http://wiki.github.com/mislav/will_paginate >= 3.0 (as a gem or plugin)
 
 h3. Installing
 
-<pre>script/plugin install git://github.com/matthutchinson/will_paginate-liquidized.git</pre>
+Rails 2:
+<pre>script/plugin install https://github.com/tronfu/will_paginate-liquidized.git</pre>
+
+Rails 3:
+<pre>rails plugin install https://github.com/tronfu/will_paginate-liquidized.git</pre>
 
 h2. Using
 
@@ -46,7 +53,7 @@ In your controller you might have something like this;
 In your view put something like this in movies/index.html.erb;
 
 <pre>
-  <%= Liquid::Template.parse("{{ movies | will_paginate_liquid }}").render({'movies' => @movies}, :registers => {:controller => @controller}) %>  
+  <%= Liquid::Template.parse("{{ movies | will_paginate }}").render({'movies' => @movies}, :registers => {:controller => @controller}) %>  
 </pre>
 
 *NOTE:* you must remember to pass the current controller in rendering (:registers). If anyone can think of a way around this let me know.
@@ -54,7 +61,7 @@ In your view put something like this in movies/index.html.erb;
 You won't get any pagination links until you exceed 10 (per_page setting defined in controller action). You can also pass the following other optional arguments to the will_paginate_liquid method.
 
 <pre>
-  {{ movies | will_paginate_liquid : 'anchor', 'prev_label', 'next_label' }}
+  {{ movies | will_paginate : 'anchor', 'prev_label', 'next_label' }}
   
   anchor: apply a #anchor to all generated urls in the pagination
   prev_label: label for the previous page button
@@ -70,6 +77,7 @@ h2. Credits
 
 Who's who?
 
+* Updated by "Tron Fu":http://www.riverwatcher.com
 * Authored by "Matthew Hutchinson":http://matthewhutchinson.net
 * Modified from the original plugin at "Artweb Design":http://www.artweb-design.de/projects/ruby-on-rails-plugin-will_paginate-liquidized
 * "Will-Paginate":http://wiki.github.com/mislav/will_paginate by "mislav":http://wiki.github.com/mislav/
